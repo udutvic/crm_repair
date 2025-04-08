@@ -14,7 +14,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 
 // Middleware
 app.use(cors({
-  origin: ['https://crm-repair-web.onrender.com', 'http://localhost:5173', 'https://crm-repair-node.onrender.com'],
+  origin: ['https://crm-repair-web.onrender.com', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -24,11 +24,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Маршрути API
 app.use('/api', routes);
+app.use('/', routes); // Додаємо маршрути без префіксу для сумісності
 
-// Тестовий маршрут
-app.get('/', (_req: Request, res: Response) => {
-  res.send('CRM Repair API працює!');
-});
+// Тестовий маршрут видалено, щоб уникнути конфліктів з основними маршрутами
 
 // Глобальний error handler
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
