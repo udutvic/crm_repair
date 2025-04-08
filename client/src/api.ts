@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Client, Device, Order, OrderStatus } from './types';
 
 // URL для локального тестування
-const API_URL = 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Клієнти
 export const getClients = async (): Promise<Client[]> => {
