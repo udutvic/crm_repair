@@ -1,0 +1,42 @@
+# Залежності
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+
+# Збірки
+/dist
+/build
+/client/build
+/client/dist
+
+# Середовище розробки
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Файли бази даних SQLite
+*.sqlite
+*.sqlite3
+*.db
+
+# Файли IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Системні файли
+.DS_Store
+Thumbs.db
+
+# Логи
+logs/
+*.log
+
+# Тимчасові файли
+tmp/
+temp/
