@@ -14,9 +14,10 @@ const isDev = process.env.NODE_ENV !== 'production';
 
 // Middleware
 app.use(cors({
-  origin: ['https://crm-repair-web.onrender.com'],
+  origin: ['https://crm-repair-web.onrender.com', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
