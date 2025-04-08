@@ -6,7 +6,7 @@ import {
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import DeviceForm from '../components/DeviceForm';
 import { Device } from '../types';
-import { getDevices, createDevice, updateDevice, deleteDevice } from '../api';
+import { getDevices, createDevice, deleteDevice } from '../api';
 
 const DevicesPage: React.FC = () => {
   const [devices, setDevices] = useState<Device[]>([]);
@@ -50,14 +50,11 @@ const DevicesPage: React.FC = () => {
   const handleSubmit = async (data: Device) => {
     try {
       if (selectedDevice) {
-        console.log('Оновлюю пристрій:', selectedDevice.id, data);
-        await updateDevice(selectedDevice.id!, data);
+        // await updateDevice(selectedDevice.id!, data);
       } else {
-        console.log('Створюю новий пристрій:', data);
         await createDevice(data);
       }
-      setOpenForm(false); // Закриваємо форму після успішного збереження
-      loadDevices(); // Оновлюємо список пристроїв
+      loadDevices();
     } catch (error) {
       console.error('Помилка збереження пристрою:', error);
     }

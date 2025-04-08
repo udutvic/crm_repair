@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { createClient } from '../api';
 import { Client } from '../types';
 import { useApiRequest } from '../hooks/useApiRequest';
-import ErrorMessage from './ErrorMessage';
 
 interface AddClientFormProps {
   onClientAdded?: (client: Client) => void;
@@ -62,7 +61,7 @@ export const AddClientForm: React.FC<AddClientFormProps> = ({ onClientAdded }) =
     <div className="bg-white shadow-md rounded-lg p-6 mb-6">
       <h2 className="text-xl font-semibold mb-4">Додати нового клієнта</h2>
       
-      {error && <ErrorMessage message={error} onClose={clearError} />}
+     
       
       {success && (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
