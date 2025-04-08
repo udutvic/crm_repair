@@ -41,8 +41,8 @@ const startServer = async (): Promise<void> => {
     await sequelize.authenticate();
     console.log('✅ Підключення до бази даних встановлено');
 
-    await sequelize.sync({ force: isDev });
-    console.log('🗃 Схема бази даних синхронізована');
+    await sequelize.sync({ force: isDev, alter: !isDev });
+console.log('🗃 Схема бази даних синхронізована');
 
     if (isDev) {
       console.log('🌱 Заповнення тестовими даними...');
