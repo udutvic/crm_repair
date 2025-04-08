@@ -24,13 +24,28 @@ export const getClientById = async (req: Request, res: Response): Promise<void> 
  * Створення нового клієнта
  */
 export const createClient = async (req: Request, res: Response): Promise<void> => {
-  const { name, phone, email } = req.body;
-  const newClient = await Client.create({
-    name,
-    phone,
-    email
-  });
-  res.status(201).json(newClient);
+  try {
+    console.log('Отримано запит на створення клієнта:', req.body);
+    const { name, phone, email } = req.body;
+    
+    if (!name || !phone) {
+      console.log('Помилка: відсутні обов\'язкові поля');
+      res.status(400).json({ error: 'Ім\'я та телефон є обов\'язковими полями' });
+      return;
+    }
+    
+    const newClient = await Client.create({
+      name,
+      phone,
+      email
+    });
+    
+    console.log('Клієнт успішно створений:', newClient.toJSON());
+    res.status(201).json(newClient);
+  } catch (error: any) {
+    console.error('Помилка при створенні клієнта:', error);
+    res.status(500).json({ error: 'Помилка при створенні клієнта', details: error.message });
+  }
 };
 
 /**
