@@ -6,7 +6,7 @@ import {
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import DeviceForm from '../components/DeviceForm';
 import { Device } from '../types';
-import { getDevices, createDevice, deleteDevice } from '../api';
+import { getDevices, createDevice, deleteDevice } from '../index';
 
 const DevicesPage: React.FC = () => {
   const [devices, setDevices] = useState<Device[]>([]);

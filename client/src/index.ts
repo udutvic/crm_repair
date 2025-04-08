@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Client, Device, Order, OrderStatus } from './types';
 
-const API_URL = 'http://localhost:5000/api';
+import {API_URL} from './api';
 
 // Клієнти
 export const getClients = async (): Promise<Client[]> => {

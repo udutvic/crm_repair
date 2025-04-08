@@ -14,7 +14,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 
 // Middleware
 app.use(cors({
-  origin: '*',
+  origin: ['https://crm-repair-web.onrender.com'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));

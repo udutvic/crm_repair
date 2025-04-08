@@ -6,7 +6,7 @@ import {
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import ClientForm from '../components/ClientForm';
 import { Client } from '../types';
-import { getClients, createClient, updateClient, deleteClient } from '../api';
+import { getClients, createClient, updateClient, deleteClient } from '../index';
 
 const ClientsPage: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);

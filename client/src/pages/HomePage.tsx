@@ -10,7 +10,7 @@ import {
   Assignment as OrderIcon, 
   AttachMoney as MoneyIcon 
 } from '@mui/icons-material';
-import { getClients, getDevices, getOrders } from '../api';
+import { getClients, getDevices, getOrders } from '../index';
 import { Client, Device, Order } from '../types';
 
 const HomePage: React.FC = () => {

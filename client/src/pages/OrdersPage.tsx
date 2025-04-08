@@ -7,7 +7,7 @@ import {
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import OrderForm from '../components/OrderForm';
 import { Order, OrderStatus } from '../types';
-import { getOrders, createOrder, updateOrder, updateOrderStatus, deleteOrder } from '../api';
+import { getOrders, createOrder, updateOrder, updateOrderStatus, deleteOrder } from '../index';
 
 const OrdersPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);

@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { Order, Device, OrderStatus } from '../types';
-import { getDevices } from '../api';
+import { getDevices } from '../index';
 
 interface OrderFormProps {
   open: boolean;

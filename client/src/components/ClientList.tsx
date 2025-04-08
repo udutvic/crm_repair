@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getClients } from '../api';
+import { getClients } from '../index';
 import { Client } from '../types';
 import { useApiRequest } from '../hooks/useApiRequest';
 

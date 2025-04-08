@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { Device, Client } from '../types';
-import { getClients } from '../api';
+import { getClients } from '../index';
 
 interface DeviceFormProps {
   open: boolean;
@@ -26,14 +26,6 @@ const DeviceForm: React.FC<DeviceFormProps> = ({ open, onClose, onSubmit, initia
       clientId: -1 // Використовуємо -1 як маркер відсутнього значення
     }
   });
-  
-  // Оновлюємо значення форми при зміні initialData
-  useEffect(() => {
-    if (initialData) {
-      console.log('Оновлюю форму пристрою з даними:', initialData);
-      reset(initialData);
-    }
-  }, [initialData, reset]);
 
   useEffect(() => {
     const fetchClients = async () => {
