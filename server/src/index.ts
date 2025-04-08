@@ -23,10 +23,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Маршрути API
-app.use('/api', routes);
-app.use('/', routes); // Додаємо маршрути без префіксу для сумісності
+// Видаляємо тестовий маршрут і додаємо маршрути без префіксу
 
-// Тестовий маршрут видалено, щоб уникнути конфліктів з основними маршрутами
+// Додаємо маршрут для кореневого шляху, який повертає статус API
+app.get('/', (_req: Request, res: Response) => {
+  res.json({ status: 'ok', message: 'CRM Repair API працює!' });
+});
+
+// Додаємо маршрути API
+app.use('/api', routes);
+app.use('/', routes);
 
 // Глобальний error handler
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
