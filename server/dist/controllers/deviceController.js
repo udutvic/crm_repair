@@ -108,8 +108,14 @@ export const createDevice = async (req, res) => {
             serialNumber,
             clientId
         });
-        console.log('Пристрій успішно створено:', newDevice.toJSON());
-        res.status(201).json(newDevice);
+        
+        // Завантажуємо дані про клієнта перед відправкою відповіді
+        const deviceWithClient = await Device.findByPk(newDevice.id, {
+            include: [{ model: Client }]
+        });
+        
+        console.log('Пристрій успішно створено:', deviceWithClient.toJSON());
+        res.status(201).json(deviceWithClient);
     }
     catch (error) {
         console.error('Помилка при створенні пристрою:', error);
@@ -145,8 +151,14 @@ export const updateDevice = async (req, res) => {
             serialNumber,
             clientId
         });
-        console.log('Пристрій успішно оновлено:', device.toJSON());
-        res.status(200).json(device);
+        
+        // Завантажуємо оновлений пристрій з даними про клієнта
+        const updatedDevice = await Device.findByPk(id, {
+            include: [{ model: Client }]
+        });
+        
+        console.log('Пристрій успішно оновлено:', updatedDevice.toJSON());
+        res.status(200).json(updatedDevice);
     }
     catch (error) {
         console.error('Помилка при оновленні пристрою:', error);
