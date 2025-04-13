@@ -1,10 +1,10 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import routes from './routes';
-import sequelize from './config/database';
-import './models'; // ініціалізація моделей
-import seedDatabase from './seedData';
+import routes from './routes/index.js';
+import sequelize from './config/database.js';
+import './models/index.js'; // ініціалізація моделей
+import seedDatabase from './seedData.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';

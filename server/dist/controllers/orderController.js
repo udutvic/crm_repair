@@ -1,4 +1,4 @@
-import { Order, Device, Client } from '../models';
+import { Order, Device, Client } from '../models/index.js';
 import { Op } from 'sequelize';
 /**
  * Отримання всіх замовлень

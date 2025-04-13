@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Device, Client } from '../models';
+import { Device, Client } from '../models/index.js';
 import { Op } from 'sequelize';
 
 /**

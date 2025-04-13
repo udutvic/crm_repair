@@ -1,4 +1,4 @@
-import { Client } from '../models';
+import { Client } from '../models/index.js';
 import { Op } from 'sequelize';
 /**
  * Отримання всіх клієнтів

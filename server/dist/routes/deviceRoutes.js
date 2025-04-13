@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { deviceController } from '../controllers';
+import { deviceController } from '../controllers/index.js';
 const router = Router();
 /**
  * @route GET /api/devices

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Client } from '../models';
-import sequelize from '../config/database';
+import { Client } from '../models/index.js';
+import sequelize from '../config/database.js';
 import { Op } from 'sequelize';
 
 /**
