@@ -6,6 +6,10 @@ import sequelize from './config/database';
 import './models'; // ініціалізація моделей
 import seedDatabase from './seedData';
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+
 dotenv.config();
 
 const app = express();
@@ -14,7 +18,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 
 // Middleware
 app.use(cors({
-  origin: '*', // Дозволяємо запити з усіх доменів
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -22,15 +26,12 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Маршрути API
-// Видаляємо тестовий маршрут і додаємо маршрути без префіксу
-
-// Додаємо маршрут для кореневого шляху, який повертає статус API
+// Статусний маршрут
 app.get('/', (_req: Request, res: Response) => {
   res.json({ status: 'ok', message: 'CRM Repair API працює!' });
 });
 
-// Додаємо маршрути API
+// Основні маршрути API
 app.use('/api', routes);
 app.use('/', routes);
 
@@ -40,6 +41,29 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   res.status(500).send('Щось пішло не так');
 });
 
+// ==== ДОДАНО: Обробка фронтенду для React SPA ====
+
+// потрібні для __dirname в ES-модулі
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Шлях до React-білду
+const clientBuildPath = path.join(__dirname, '..', 'client', 'dist');
+
+// Якщо білд існує — обслуговуємо його
+if (fs.existsSync(clientBuildPath)) {
+  app.use(express.static(clientBuildPath));
+
+  // Fallback для SPA-маршрутів (/, /clients, /orders тощо)
+  app.get('*', (_req: Request, res: Response) => {
+    res.sendFile(path.join(clientBuildPath, 'index.html'));
+  });
+} else {
+  console.warn('⚠️  client/dist не знайдено. Перевір, чи зроблений білд фронтенду.');
+}
+
+// ==== Кінець обробки фронтенду ====
+
 // Старт сервера
 const startServer = async (): Promise<void> => {
   try {
@@ -47,9 +71,8 @@ const startServer = async (): Promise<void> => {
     console.log('✅ Підключення до бази даних встановлено');
 
     await sequelize.sync({ force: isDev, alter: !isDev });
-    console.log('🗃 Схема бази даних синхронізована'); 
+    console.log('🗃 Схема бази даних синхронізована');
 
-    // Заповнюємо базу даних тестовими даними, якщо вона порожня
     try {
       const clientCount = await (await import('./models')).Client.count();
       if (clientCount === 0) {
@@ -72,4 +95,3 @@ const startServer = async (): Promise<void> => {
 };
 
 startServer();
-

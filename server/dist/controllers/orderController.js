@@ -1,19 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchOrders = exports.deleteOrder = exports.updateOrderStatus = exports.updateOrder = exports.createOrder = exports.getOrdersByDate = exports.getOrdersByStatus = exports.getOrderById = exports.getAllOrders = void 0;
-const models_1 = require("../models");
-const sequelize_1 = require("sequelize");
+import { Order, Device, Client } from '../models';
+import { Op } from 'sequelize';
 /**
  * Отримання всіх замовлень
  */
-const getAllOrders = async (req, res) => {
+export const getAllOrders = async (req, res) => {
     try {
-        const orders = await models_1.Order.findAll({
+        const orders = await Order.findAll({
             include: [
                 {
-                    model: models_1.Device,
+                    model: Device,
                     as: 'device',
-                    include: [{ model: models_1.Client, as: 'client' }]
+                    include: [{ model: Client, as: 'client' }]
                 }
             ],
             order: [['createdAt', 'DESC']]
@@ -25,19 +22,18 @@ const getAllOrders = async (req, res) => {
         res.status(500).json({ message: 'Помилка сервера при отриманні замовлень' });
     }
 };
-exports.getAllOrders = getAllOrders;
 /**
  * Отримання замовлення за ID
  */
-const getOrderById = async (req, res) => {
+export const getOrderById = async (req, res) => {
     try {
         const { id } = req.params;
-        const order = await models_1.Order.findByPk(id, {
+        const order = await Order.findByPk(id, {
             include: [
                 {
-                    model: models_1.Device,
+                    model: Device,
                     as: 'device',
-                    include: [{ model: models_1.Client, as: 'client' }]
+                    include: [{ model: Client, as: 'client' }]
                 }
             ]
         });
@@ -52,11 +48,10 @@ const getOrderById = async (req, res) => {
         res.status(500).json({ message: 'Помилка сервера при отриманні замовлення' });
     }
 };
-exports.getOrderById = getOrderById;
 /**
  * Отримання замовлень за статусом
  */
-const getOrdersByStatus = async (req, res) => {
+export const getOrdersByStatus = async (req, res) => {
     try {
         const { status } = req.params;
         // Перевірка валідності статусу
@@ -67,13 +62,13 @@ const getOrdersByStatus = async (req, res) => {
             });
             return;
         }
-        const orders = await models_1.Order.findAll({
+        const orders = await Order.findAll({
             where: { status },
             include: [
                 {
-                    model: models_1.Device,
+                    model: Device,
                     as: 'device',
-                    include: [{ model: models_1.Client, as: 'client' }]
+                    include: [{ model: Client, as: 'client' }]
                 }
             ],
             order: [['createdAt', 'DESC']]
@@ -85,28 +80,27 @@ const getOrdersByStatus = async (req, res) => {
         res.status(500).json({ message: 'Помилка сервера при отриманні замовлень за статусом' });
     }
 };
-exports.getOrdersByStatus = getOrdersByStatus;
 /**
  * Отримання замовлень за датою
  */
-const getOrdersByDate = async (req, res) => {
+export const getOrdersByDate = async (req, res) => {
     try {
         const { startDate, endDate } = req.query;
         if (!startDate || !endDate) {
             res.status(400).json({ message: 'Параметри startDate та endDate є обов\'язковими' });
             return;
         }
-        const orders = await models_1.Order.findAll({
+        const orders = await Order.findAll({
             where: {
                 createdAt: {
-                    [sequelize_1.Op.between]: [new Date(startDate), new Date(endDate)]
+                    [Op.between]: [new Date(startDate), new Date(endDate)]
                 }
             },
             include: [
                 {
-                    model: models_1.Device,
+                    model: Device,
                     as: 'device',
-                    include: [{ model: models_1.Client, as: 'client' }]
+                    include: [{ model: Client, as: 'client' }]
                 }
             ],
             order: [['createdAt', 'DESC']]
@@ -118,11 +112,10 @@ const getOrdersByDate = async (req, res) => {
         res.status(500).json({ message: 'Помилка сервера при отриманні замовлень за датою' });
     }
 };
-exports.getOrdersByDate = getOrdersByDate;
 /**
  * Створення нового замовлення
  */
-const createOrder = async (req, res) => {
+export const createOrder = async (req, res) => {
     try {
         const { deviceId, problem, status, price } = req.body;
         // Базова валідація
@@ -131,7 +124,7 @@ const createOrder = async (req, res) => {
             return;
         }
         // Перевірка існування пристрою
-        const device = await models_1.Device.findByPk(deviceId);
+        const device = await Device.findByPk(deviceId);
         if (!device) {
             res.status(404).json({ message: `Пристрій з ID ${deviceId} не знайдено` });
             return;
@@ -144,7 +137,7 @@ const createOrder = async (req, res) => {
             });
             return;
         }
-        const newOrder = await models_1.Order.create({
+        const newOrder = await Order.create({
             deviceId,
             problem,
             status: status || 'pending',
@@ -152,12 +145,12 @@ const createOrder = async (req, res) => {
             completedAt: status === 'completed' ? new Date() : undefined
         });
         // Отримуємо створене замовлення з інформацією про пристрій та клієнта
-        const orderWithDetails = await models_1.Order.findByPk(newOrder.id, {
+        const orderWithDetails = await Order.findByPk(newOrder.id, {
             include: [
                 {
-                    model: models_1.Device,
+                    model: Device,
                     as: 'device',
-                    include: [{ model: models_1.Client, as: 'client' }]
+                    include: [{ model: Client, as: 'client' }]
                 }
             ]
         });
@@ -168,11 +161,10 @@ const createOrder = async (req, res) => {
         res.status(500).json({ message: 'Помилка сервера при створенні замовлення' });
     }
 };
-exports.createOrder = createOrder;
 /**
  * Оновлення існуючого замовлення
  */
-const updateOrder = async (req, res) => {
+export const updateOrder = async (req, res) => {
     try {
         const { id } = req.params;
         const { deviceId, problem, status, price } = req.body;
@@ -184,7 +176,7 @@ const updateOrder = async (req, res) => {
             res.status(400).json({ message: 'ID пристрою та опис проблеми є обов\'язковими полями' });
             return;
         }
-        const order = await models_1.Order.findByPk(id);
+        const order = await Order.findByPk(id);
         if (!order) {
             console.log(`Помилка: Замовлення з ID ${id} не знайдено`);
             res.status(404).json({ message: `Замовлення з ID ${id} не знайдено` });
@@ -192,7 +184,7 @@ const updateOrder = async (req, res) => {
         }
         console.log('Знайдено замовлення:', order.toJSON());
         // Перевірка існування пристрою
-        const device = await models_1.Device.findByPk(deviceId);
+        const device = await Device.findByPk(deviceId);
         if (!device) {
             res.status(404).json({ message: `Пристрій з ID ${deviceId} не знайдено` });
             return;
@@ -225,12 +217,12 @@ const updateOrder = async (req, res) => {
         });
         console.log('Замовлення успішно оновлено');
         // Отримуємо оновлене замовлення з інформацією про пристрій та клієнта
-        const updatedOrder = await models_1.Order.findByPk(id, {
+        const updatedOrder = await Order.findByPk(id, {
             include: [
                 {
-                    model: models_1.Device,
+                    model: Device,
                     as: 'device',
-                    include: [{ model: models_1.Client, as: 'client' }]
+                    include: [{ model: Client, as: 'client' }]
                 }
             ]
         });
@@ -241,11 +233,10 @@ const updateOrder = async (req, res) => {
         res.status(500).json({ message: 'Помилка сервера при оновленні замовлення' });
     }
 };
-exports.updateOrder = updateOrder;
 /**
  * Оновлення статусу замовлення
  */
-const updateOrderStatus = async (req, res) => {
+export const updateOrderStatus = async (req, res) => {
     console.log('Отримано запит на зміну статусу:', req.params, req.body);
     try {
         const { id } = req.params;
@@ -265,7 +256,7 @@ const updateOrderStatus = async (req, res) => {
             });
             return;
         }
-        const order = await models_1.Order.findByPk(id);
+        const order = await Order.findByPk(id);
         if (!order) {
             console.log(`Помилка: Замовлення з ID ${id} не знайдено`);
             res.status(404).json({ message: `Замовлення з ID ${id} не знайдено` });
@@ -289,7 +280,7 @@ const updateOrderStatus = async (req, res) => {
             throw updateError;
         }
         // Отримуємо оновлене замовлення
-        const updatedOrder = await models_1.Order.findByPk(id);
+        const updatedOrder = await Order.findByPk(id);
         console.log('Оновлене замовлення:', updatedOrder);
         res.status(200).json(updatedOrder);
         console.log('Відповідь успішно відправлена');
@@ -299,14 +290,13 @@ const updateOrderStatus = async (req, res) => {
         res.status(500).json({ message: 'Помилка сервера при оновленні статусу замовлення' });
     }
 };
-exports.updateOrderStatus = updateOrderStatus;
 /**
  * Видалення замовлення
  */
-const deleteOrder = async (req, res) => {
+export const deleteOrder = async (req, res) => {
     try {
         const { id } = req.params;
-        const order = await models_1.Order.findByPk(id);
+        const order = await Order.findByPk(id);
         if (!order) {
             res.status(404).json({ message: `Замовлення з ID ${id} не знайдено` });
             return;
@@ -319,26 +309,25 @@ const deleteOrder = async (req, res) => {
         res.status(500).json({ message: 'Помилка сервера при видаленні замовлення' });
     }
 };
-exports.deleteOrder = deleteOrder;
 /**
  * Пошук замовлень за параметрами
  */
-const searchOrders = async (req, res) => {
+export const searchOrders = async (req, res) => {
     try {
         const { q } = req.query;
         if (!q) {
             res.status(400).json({ message: 'Параметр пошуку q є обов\'язковим' });
             return;
         }
-        const orders = await models_1.Order.findAll({
+        const orders = await Order.findAll({
             where: {
-                problem: { [sequelize_1.Op.iLike]: `%${q}%` }
+                problem: { [Op.iLike]: `%${q}%` }
             },
             include: [
                 {
-                    model: models_1.Device,
+                    model: Device,
                     as: 'device',
-                    include: [{ model: models_1.Client, as: 'client' }]
+                    include: [{ model: Client, as: 'client' }]
                 }
             ],
             order: [['createdAt', 'DESC']]
@@ -350,4 +339,3 @@ const searchOrders = async (req, res) => {
         res.status(500).json({ message: 'Помилка сервера при пошуку замовлень' });
     }
 };
-exports.searchOrders = searchOrders;
