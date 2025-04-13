@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import routes from './routes';
 import sequelize from './config/database';
 import './models'; // ініціалізація моделей
-// import seedDatabase from './seedData';
+import seedDatabase from './seedData';
 
 dotenv.config();
 
@@ -47,7 +47,21 @@ const startServer = async (): Promise<void> => {
     console.log('✅ Підключення до бази даних встановлено');
 
     await sequelize.sync({ force: isDev, alter: !isDev });
-console.log('🗃 Схема бази даних синхронізована'); 
+    console.log('🗃 Схема бази даних синхронізована'); 
+
+    // Заповнюємо базу даних тестовими даними, якщо вона порожня
+    try {
+      const clientCount = await (await import('./models')).Client.count();
+      if (clientCount === 0) {
+        console.log('📊 Заповнюємо базу даних тестовими даними...');
+        await seedDatabase();
+        console.log('✅ Тестові дані успішно додано');
+      } else {
+        console.log('📊 База даних вже містить дані, пропускаємо ініціалізацію');
+      }
+    } catch (error) {
+      console.error('❌ Помилка при заповненні бази даних:', error);
+    }
 
     app.listen(PORT, () => {
       console.log(`🚀 Сервер запущено на порту ${PORT}`);
