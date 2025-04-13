@@ -94,7 +94,9 @@ const DevicesPage: React.FC = () => {
                 <TableCell>
                   {device.client ? (
                     <Chip label={device.client.name} size="small" />
-                  ) : device.client}
+                  ) : (
+                    <Chip label="No owner" size="small" color="default" variant="outlined" />
+                  )}
                 </TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleEditDevice(device)}>
