@@ -46,6 +46,55 @@ export const getDeviceById = async (req: Request, res: Response): Promise<void> 
 /**
  * Створення нового пристрою
  */
+/**
+ * Пошук пристроїв за параметрами
+ */
+export const searchDevices = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { query } = req.query;
+    console.log(`Пошук пристроїв за запитом: ${query}`);
+    
+    const devices = await Device.findAll({
+      where: {
+        [Op.or]: [
+          { brand: { [Op.like]: `%${query}%` } },
+          { model: { [Op.like]: `%${query}%` } },
+          { serialNumber: { [Op.like]: `%${query}%` } }
+        ]
+      },
+      include: [{ model: Client }]
+    });
+    
+    res.status(200).json(devices);
+  } catch (error: any) {
+    console.error('Помилка при пошуку пристроїв:', error);
+    res.status(500).json({ error: 'Помилка при пошуку пристроїв', details: error.message });
+  }
+};
+
+/**
+ * Отримання пристроїв за ID клієнта
+ */
+export const getDevicesByClientId = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { clientId } = req.params;
+    console.log(`Запит на отримання пристроїв для клієнта з ID: ${clientId}`);
+    
+    const devices = await Device.findAll({
+      where: { clientId },
+      include: [{ model: Client }]
+    });
+    
+    res.status(200).json(devices);
+  } catch (error: any) {
+    console.error(`Помилка при отриманні пристроїв клієнта:`, error);
+    res.status(500).json({ error: 'Помилка при отриманні пристроїв клієнта', details: error.message });
+  }
+};
+
+/**
+ * Створення нового пристрою
+ */
 export const createDevice = async (req: Request, res: Response): Promise<void> => {
   try {
     console.log('Отримано запит на створення пристрою:', req.body);

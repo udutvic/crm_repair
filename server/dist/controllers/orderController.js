@@ -176,16 +176,21 @@ const updateOrder = async (req, res) => {
     try {
         const { id } = req.params;
         const { deviceId, problem, status, price } = req.body;
+        console.log('Отримано запит на оновлення замовлення:', id);
+        console.log('Тіло запиту:', req.body);
         // Базова валідація
         if (!deviceId || !problem) {
+            console.log('Помилка валідації: відсутні обов\'язкові поля');
             res.status(400).json({ message: 'ID пристрою та опис проблеми є обов\'язковими полями' });
             return;
         }
         const order = await models_1.Order.findByPk(id);
         if (!order) {
+            console.log(`Помилка: Замовлення з ID ${id} не знайдено`);
             res.status(404).json({ message: `Замовлення з ID ${id} не знайдено` });
             return;
         }
+        console.log('Знайдено замовлення:', order.toJSON());
         // Перевірка існування пристрою
         const device = await models_1.Device.findByPk(deviceId);
         if (!device) {
@@ -204,6 +209,13 @@ const updateOrder = async (req, res) => {
         const completedAt = status === 'completed'
             ? (order.status !== 'completed' ? new Date() : order.completedAt)
             : (status === 'pending' || status === 'in_progress' || status === 'cancelled' ? undefined : order.completedAt);
+        console.log('Оновлюю замовлення з наступними даними:', {
+            deviceId,
+            problem,
+            status: status || order.status,
+            price: price !== undefined ? price : order.price,
+            completedAt
+        });
         await order.update({
             deviceId,
             problem,
@@ -211,6 +223,7 @@ const updateOrder = async (req, res) => {
             price: price !== undefined ? price : order.price,
             completedAt
         });
+        console.log('Замовлення успішно оновлено');
         // Отримуємо оновлене замовлення з інформацією про пристрій та клієнта
         const updatedOrder = await models_1.Order.findByPk(id, {
             include: [
