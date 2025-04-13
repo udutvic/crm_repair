@@ -26,8 +26,8 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Статусний маршрут
-app.get('/', (_req: Request, res: Response) => {
+// Статусний маршрут для API
+app.get('/api/status', (_req: Request, res: Response) => {
   res.json({ status: 'ok', message: 'CRM Repair API працює!' });
 });
 
