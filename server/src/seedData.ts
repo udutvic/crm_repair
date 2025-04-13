@@ -1,6 +1,6 @@
-import Client from './models/Client';
-import Device from './models/Device';
-import Order from './models/Order';
+import Client from './models/Client.js';
+import Device from './models/Device.js';
+import Order from './models/Order.js';
 
 /**
  * Заповнює базу даних тестовими даними

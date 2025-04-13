@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database';
-import Client from './Client';
+import sequelize from '../config/database.js';
+import Client from './Client.js';
 
 interface DeviceAttributes {
   id?: number;

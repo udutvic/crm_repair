@@ -1,6 +1,6 @@
-import Client from './Client';
-import Device from './Device';
-import Order from './Order';
+import Client from './Client.js';
+import Device from './Device.js';
+import Order from './Order.js';
 // Спрощена версія асоціацій між моделями
 const setupAssociations = () => {
     try {

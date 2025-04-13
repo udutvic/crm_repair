@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database';
-import Device from './Device';
+import sequelize from '../config/database.js';
+import Device from './Device.js';
 
 type OrderStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';
 
