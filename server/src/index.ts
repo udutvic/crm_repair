@@ -33,7 +33,6 @@ app.get('/', (_req: Request, res: Response) => {
 
 // Основні маршрути API
 app.use('/api', routes);
-app.use('/', routes);
 
 // Глобальний error handler
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
