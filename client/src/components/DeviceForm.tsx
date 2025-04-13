@@ -23,7 +23,7 @@ const DeviceForm: React.FC<DeviceFormProps> = ({ open, onClose, onSubmit, initia
       brand: '',
       model: '',
       serialNumber: '',
-      clientId: -1 // Використовуємо -1 як маркер відсутнього значення
+      client: {}
     }
   });
 
