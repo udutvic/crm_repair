@@ -6,7 +6,7 @@ import {
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import DeviceForm from '../components/DeviceForm';
 import { Device } from '../types';
-import { getDevices, createDevice, deleteDevice } from '../index';
+import { getDevices, createDevice, updateDevice, deleteDevice } from '../index';
 
 const DevicesPage: React.FC = () => {
   const [devices, setDevices] = useState<Device[]>([]);
@@ -50,7 +50,7 @@ const DevicesPage: React.FC = () => {
   const handleSubmit = async (data: Device) => {
     try {
       if (selectedDevice) {
-        // await updateDevice(selectedDevice.id!, data);
+        await updateDevice(selectedDevice.id!, data);
       } else {
         await createDevice(data);
       }
@@ -95,7 +95,7 @@ const DevicesPage: React.FC = () => {
                   {device.client ? (
                     <Chip label={device.client.name} size="small" />
                   ) : (
-                    <Chip label="No owner" size="small" color="default" variant="outlined" />
+                    <Chip label="Немає власника" size="small" color="default" variant="outlined" />
                   )}
                 </TableCell>
                 <TableCell>
